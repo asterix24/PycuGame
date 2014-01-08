@@ -9,7 +9,7 @@ py.init()
 screen=py.display.set_mode((640,480),0,32)
 bg=py.image.load(bg_file).convert()
 ch=py.image.load(ch_file)
-#py.draw.rect(screen,(255,255,255),Rect((300,300),10))
+py.draw.rect(bg,(255,255,255),Rect((300,300),(10,20)))
 x,y=0,298
 move_x,move_y=0,0
 while True:
