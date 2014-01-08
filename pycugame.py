@@ -9,7 +9,7 @@ py.init()
 screen=py.display.set_mode((640,480),0,32)
 bg=py.image.load(bg_file).convert()
 ch=py.image.load(ch_file)
-py.draw.rect(bg,(255,255,255),Rect((300,300),(10,20)))
+py.draw.rect(bg,(255,0,0),Rect((300,300),(10,80)))
 x,y=0,298
 move_x,move_y=0,0
 while True:
@@ -43,6 +43,11 @@ while True:
         y=220
     if x>640:
         x=-20
+    # non oltre la sbarra! ->> 
+    if y==298 and x in range(230,240):
+            x=230
+    elif x>240 and y<=298 :
+        x+=move_x
     screen.fill((0,0,0))
     screen.blit(bg,(0,0))
     screen.blit(ch,(x,y))
