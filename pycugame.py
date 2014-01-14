@@ -15,8 +15,12 @@ py.display.set_caption('PyCuGame')
 screen=py.display.set_mode((640,480),0,32)
 bg=py.image.load(bg_file).convert()
 ch=py.image.load(ch_file)
-pycu=py.image.load('images/sheep.png')
-px=10
+pycua=py.image.load('images/sheep_a.png')
+pycub=py.image.load('images/sheep_b.png')
+pycu = pycua
+a = True
+t = 0
+px=480
 pyi=10
 py.draw.rect(bg,(255,0,0),Rect((300,300),(10,80)))
 x,y=0,298
@@ -33,7 +37,7 @@ while True:
                 move_x=+1
             elif event.key== K_SPACE :
                 move_y=-10
-            elif event.key== K_0:
+            elif event.key == K_ESCAPE:
                 exit()
 
         elif event.type==KEYUP:
@@ -60,15 +64,24 @@ while True:
         x+=move_x
 
 
+    px -= 5
+    t += 1
+    if px < 0:
+        px = 480
 
-    px += 5
-    if px >= 480:
-        px = 10
+    if t == 3:
+        t = 0
+        pycu = pycub
+        if a:
+            pycu = pycua
+        a = not a
+
 
     screen.fill((0,0,0))
     screen.blit(bg,(0,0))
     screen.blit(ch,(x,y))
     screen.blit(pycu,(px,pyi))
+
     py.display.update()
     fpsClock.tick(FPS)
 
