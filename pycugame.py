@@ -60,7 +60,7 @@ while True:
 
 
     px += 1
-    if px < 480:
+    if px >480:
         px = 10
 
     screen.fill((0,0,0))
