@@ -5,6 +5,7 @@ bg_file="images/sfondo.bmp"
 import pygame as py
 from pygame.locals import*
 
+#commento
 py.init()
 
 FPS = 30 # frames per second setting
