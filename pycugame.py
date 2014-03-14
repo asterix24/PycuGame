@@ -1,81 +1,68 @@
-#muoviamo sto coso!
+#!/usr/bin/env python
 
-bg_file="images/sfondo.bmp"
-#ch_file="images/omino.bmp"
-import pygame as py
-from pygame.locals import*
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# 
+# Copyright 2014 Daniele Basile <asterix24@gmail.com>
+#                Francesca Basile <hidefix92@gmail.com>
+# 
+# \author Daniele Basile <asterix24@gmail.com>
+# \author Francesca Basile <hidefix92@gmail.com>
+#
 
-#commento
-py.init()
+import sys
 
-FPS = 30 # frames per second setting
-fpsClock = py.time.Clock()
+import pygame
+from pygame.locals import *
 
-py.display.set_caption('PyCuGame')
-screen=py.display.set_mode((640,480),0,32)
-bg=py.image.load(bg_file).convert()
-py.draw.rect(bg,(255,0,0),Rect((300,300),(10,80)))
+import cfg
 
-pycu=py.image.load('images/sheep.png')
-puff=py.image.load('images/puff.png')
-pycua=py.image.load('images/sheep_a.png')
-pycub=py.image.load('images/sheep_b.png')
+def init():
+	pygame.init()
+	fpsclock = pygame.time.Clock()
+	displaysurf = pygame.display.set_mode((cfg.WINDOWWIDTH, cfg.WINDOWHEIGHT))
 
-pycu = pycua
-a = True
-t = 0
-px=480
-pyi=10
-px=10
-y=298
-move_x,move_y=0,0
+	pygame.display.set_caption(cfg.TITLE)
+	
+	background = pygame.Surface(displaysurf.get_size())
+	background = background.convert()
+	background.fill(cfg.BLACK)
 
-while True:
-    for event in py.event.get():
-        if event.type==QUIT:
-            exit()
-        if event.type==KEYDOWN:
-            if event.key== K_SPACE:
-                move_y=-20
-            elif event.key == K_ESCAPE:
-                exit()
+	font = pygame.font.Font(cfg.FONT, 72)
+	text = font.render("PyCu Game", 1, cfg.YELLOW)
+	textpos = text.get_rect()
+	textpos.centerx = background.get_rect().centerx
+	background.blit(text, textpos)
 
-        elif event.type==KEYUP:
-             if event.key== K_a:
-                move_x=0
-             elif event.key==  K_d:
-                move_x=0
-             elif event.key== K_SPACE :
-                move_y=2.5
-    y+=move_y
-    px+=3
-    if y>298:
-        y=298
-    elif y<0:
-       y=0
-    elif y<220:
-        y=220
+	displaysurf.blit(background, (0, 0))
+	pygame.display.flip()
 
-    t += 1
-    px -= 5
+	return fpsclock, displaysurf, background
 
-    if px <= 10:
-        px = 480
+def pycugame():
+	fpsclock, displaysurf, background = init()
 
-    if t == 3:
-        t = 0
-        pycu = pycub
-        if a:
-            pycu = pycua
-        a = not a
+	while True:
+		for event in pygame.event.get():
+			if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
+				pygame.quit()
+				sys.exit()
 
-    screen.fill((0,0,0))
-    screen.blit(bg,(0,0))
-    screen.blit(pycu,(px,y))
+		displaysurf.blit(background, (0, 0))
+        pygame.display.update()
+        fpsclock.tick(cfg.FPS)
 
-    py.display.update()
-    fpsClock.tick(FPS)
-
-'''per far "sparare" prova in event.key== tasto a caso, genera
- un cerchio e lo fa muovere lungo lo schermo'''
+if __name__ == "__main__":
+	pycugame()
 
