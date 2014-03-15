@@ -27,10 +27,13 @@ import pygame
 from pygame.locals import *
 
 import cfg
+from coordinate import *
 
 class FontMgr(object):
 	def __init__(self, surface):
 		self.surface = surface
+		self.curr_pos = None
+		self.obj_to_animate = None
 
 	def draw_text(self, text, color, position, size=18):
 		self.font = pygame.font.Font(cfg.FONT, size)
@@ -38,5 +41,29 @@ class FontMgr(object):
 		self.surface.blit(text, position)
 
 		return self.surface
+
+	def fall_text(self, text, color, start_pos, end_pos, size=18):
+		self.font = pygame.font.Font(cfg.FONT, size)
+		self.obj_to_animate = self.font.render(text, False, color)
+		self.obj_to_animate_n = self.font.render(text, False, cfg.BLACK)
+
+		self.start_pos = Pos(start_pos.x(), start_pos.y())
+		self.curr_pos = Pos(start_pos.x(), start_pos.y())
+		self.end_pos = end_pos
+
+	def update(self, surface):
+		if self.curr_pos is not None:
+			if self.curr_pos.y() == self.end_pos.y():
+				self.surface.blit(self.obj_to_animate_n, self.curr_pos.get())
+				self.curr_pos = Pos(self.start_pos.x(), self.start_pos.y())
+				return self.surface
+
+			self.surface.blit(self.obj_to_animate_n, self.curr_pos.get())
+			self.curr_pos.add_y(2)
+			self.surface.blit(self.obj_to_animate, self.curr_pos.get())
+
+		return self.surface
+
+
 
 

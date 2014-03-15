@@ -28,7 +28,7 @@ from pygame.locals import *
 
 import cfg
 import font_mgr
-
+from coordinate import *
 
 # Funzione di init, dove si inizializza la
 # finestra principale e tutto il resto
@@ -56,8 +56,6 @@ def event_mgr(context):
 			pygame.quit()
 			sys.exit()
 
-
-
 # Questo e' il loop principale, dove si aggiorna lo stato
 # delle varie cose.
 def pycugame():
@@ -65,13 +63,16 @@ def pycugame():
 
 	# inizializzo il fontmanager
 	font = font_mgr.FontMgr(background)
+	s = Pos(100,100)
+	e = Pos(400,400)
+	background = font.fall_text("Pycu Game!", cfg.YELLOW, s, e)
 
 	while True:
 		ev_ctx = pygame.event.get()
 
 		event_mgr(ev_ctx)
 
-		background = font.draw_text("Pycu Game!", cfg.YELLOW, (100,100))
+		background = font.update(background)
 		displaysurf.blit(background, (0, 0))
 
 		pygame.display.flip()
