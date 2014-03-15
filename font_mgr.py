@@ -30,40 +30,60 @@ import cfg
 from coordinate import *
 
 class FontMgr(object):
-	def __init__(self, surface):
-		self.surface = surface
-		self.curr_pos = None
+	def __init__(self):
+		self.update_callback = []
+
+		# Draw text context
+		self.texts = []
+
+		# Fall text context
 		self.obj_to_animate = None
+		self.obj_to_animate_n = None
+		self.start_pos = None
+		self.curr_pos  = None
+		self.end_pos = None
 
 	def draw_text(self, text, color, position, size=18):
-		self.font = pygame.font.Font(cfg.FONT, size)
-		text = self.font.render(text, True, color)
-		self.surface.blit(text, position)
+		font = pygame.font.Font(cfg.FONT, size)
+		txt = font.render(text, True, color)
 
-		return self.surface
+		self.texts.append({'text': txt, 'position': position.get()})
+		self.update_callback.append(self._draw_text_update)
+
+	def _draw_text_update(self, surface):
+		for i in self.texts:
+			surface.blit(i['text'], i['position'])
+
+		return surface
 
 	def fall_text(self, text, color, start_pos, end_pos, size=18):
-		self.font = pygame.font.Font(cfg.FONT, size)
-		self.obj_to_animate = self.font.render(text, False, color)
-		self.obj_to_animate_n = self.font.render(text, False, cfg.BLACK)
+		font = pygame.font.Font(cfg.FONT, size)
+		self.obj_to_animate = font.render(text, False, color)
+		self.obj_to_animate_n = font.render(text, False, cfg.BLACK)
 
 		self.start_pos = Pos(start_pos.x(), start_pos.y())
 		self.curr_pos = Pos(start_pos.x(), start_pos.y())
 		self.end_pos = end_pos
 
-	def update(self, surface):
+		self.update_callback.append(self._fall_text_update)
+
+	def _fall_text_update(self, surface):
 		if self.curr_pos is not None:
 			if self.curr_pos.y() == self.end_pos.y():
-				self.surface.blit(self.obj_to_animate_n, self.curr_pos.get())
+				surface.blit(self.obj_to_animate_n, self.curr_pos.get())
 				self.curr_pos = Pos(self.start_pos.x(), self.start_pos.y())
-				return self.surface
+				return surface
 
-			self.surface.blit(self.obj_to_animate_n, self.curr_pos.get())
+			surface.blit(self.obj_to_animate_n, self.curr_pos.get())
 			self.curr_pos.add_y(2)
-			self.surface.blit(self.obj_to_animate, self.curr_pos.get())
+			surface.blit(self.obj_to_animate, self.curr_pos.get())
 
-		return self.surface
+		return surface
 
+	def update(self, surface):
+		for update_foo in self.update_callback:
+			surface = update_foo(surface)
 
+		return surface
 
 
