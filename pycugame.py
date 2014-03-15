@@ -27,6 +27,8 @@ import pygame
 from pygame.locals import *
 
 import cfg
+import font_mgr
+
 
 # Funzione di init, dove si inizializza la
 # finestra principale e tutto il resto
@@ -44,15 +46,6 @@ def init():
 	background = background.convert()
 	background.fill(cfg.BLACK)
 
-	font = pygame.font.Font(cfg.FONT, 72)
-	text = font.render("PyCu Game", 1, cfg.YELLOW)
-	textpos = text.get_rect()
-	textpos.centerx = background.get_rect().centerx
-	background.blit(text, textpos)
-
-	displaysurf.blit(background, (0, 0))
-
-	pygame.display.flip()
 	return fpsclock, displaysurf, background
 
 def event_mgr(context):
@@ -70,13 +63,18 @@ def event_mgr(context):
 def pycugame():
 	fpsclock, displaysurf, background = init()
 
+	# inizializzo il fontmanager
+	font = font_mgr.FontMgr(background)
+
 	while True:
 		ev_ctx = pygame.event.get()
 
 		event_mgr(ev_ctx)
 
+		background = font.draw_text("Pycu Game!", cfg.YELLOW)
 		displaysurf.blit(background, (0, 0))
-        pygame.display.update()
+
+		pygame.display.flip()
         fpsclock.tick(cfg.FPS)
 
 if __name__ == "__main__":
