@@ -28,6 +28,11 @@ from pygame.locals import *
 
 import cfg
 
+# Funzione di init, dove si inizializza la
+# finestra principale e tutto il resto
+# questa funzione ritorna il contesto,
+# ovvero tutto quello che serve agli altri
+# oggetti per essere renderizzati a video.
 def init():
 	pygame.init()
 	fpsclock = pygame.time.Clock()
@@ -46,18 +51,29 @@ def init():
 	background.blit(text, textpos)
 
 	displaysurf.blit(background, (0, 0))
-	pygame.display.flip()
 
+	pygame.display.flip()
 	return fpsclock, displaysurf, background
 
+def event_mgr(context):
+	for event in context:
+		# usciamo con ESC e q
+		if event.type == QUIT or (event.type == KEYDOWN and 
+				(event.key == K_ESCAPE or event.key == K_q)):
+			pygame.quit()
+			sys.exit()
+
+
+
+# Questo e' il loop principale, dove si aggiorna lo stato
+# delle varie cose.
 def pycugame():
 	fpsclock, displaysurf, background = init()
 
 	while True:
-		for event in pygame.event.get():
-			if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
-				pygame.quit()
-				sys.exit()
+		ev_ctx = pygame.event.get()
+
+		event_mgr(ev_ctx)
 
 		displaysurf.blit(background, (0, 0))
         pygame.display.update()
