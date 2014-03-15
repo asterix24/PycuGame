@@ -32,11 +32,10 @@ class FontMgr(object):
 	def __init__(self, surface):
 		self.surface = surface
 
-		self.font = pygame.font.Font(cfg.FONT, 72)
-
-	def draw_text(self, text, color):
-		text = self.font.render(text, 1, color)
-		self.surface.blit(text, (100,100))
+	def draw_text(self, text, color, position, size=18):
+		self.font = pygame.font.Font(cfg.FONT, size)
+		text = self.font.render(text, True, color)
+		self.surface.blit(text, position)
 
 		return self.surface
 

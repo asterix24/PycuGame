@@ -71,7 +71,7 @@ def pycugame():
 
 		event_mgr(ev_ctx)
 
-		background = font.draw_text("Pycu Game!", cfg.YELLOW)
+		background = font.draw_text("Pycu Game!", cfg.YELLOW, (100,100))
 		displaysurf.blit(background, (0, 0))
 
 		pygame.display.flip()
