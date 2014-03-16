@@ -66,6 +66,7 @@ def pycugame():
 	font.fall_text("Pycu Game! 2", cfg.YELLOW, Pos(400,100), Pos(400,400))
 	font.draw_text("Pycu Game! 3", cfg.YELLOW, Pos(200, 200))
 	font.draw_text("Pycu Game! 4", cfg.YELLOW, Pos(400, 200))
+	font.blit_text("Pycu Game! 5", cfg.YELLOW, Pos(50, 50), 500)
 
 	while True:
 		background.fill(cfg.BLACK)

@@ -33,11 +33,9 @@ class FontMgr(object):
 	def __init__(self):
 		self.update_callback = []
 
-		# Draw text context
 		self.texts = []
-
-		# Fall text context
-		self.animate_texts = []
+		self.fall_texts = []
+		self.blit_texts = []
 
 	def draw_text(self, text, color, position, size=18):
 		font = pygame.font.Font(cfg.FONT, size)
@@ -55,7 +53,7 @@ class FontMgr(object):
 	def fall_text(self, text, color, start_pos, end_pos, size=18):
 		font = pygame.font.Font(cfg.FONT, size)
 
-		self.animate_texts.append({
+		self.fall_texts.append({
 			'obj':font.render(text, True, color),
 			'p_start':Pos(start_pos.x(), start_pos.y()),
 			'p_curr': Pos(start_pos.x(), start_pos.y()),
@@ -65,7 +63,7 @@ class FontMgr(object):
 		self.update_callback.append(self._fall_text_update)
 
 	def _fall_text_update(self, surface):
-		for i in self.animate_texts:
+		for i in self.fall_texts:
 			if i['p_curr'] is not None:
 				if i['p_curr'].y() == i['p_end'].y():
 					i['p_curr'] = Pos(i['p_start'].x(), i['p_start'].y())
@@ -73,6 +71,29 @@ class FontMgr(object):
 
 				i['p_curr'].add_y(2)
 				surface.blit(i['obj'], i['p_curr'].get())
+
+		return surface
+
+	def blit_text(self, text, color, position, delay, size=18):
+		font = pygame.font.Font(cfg.FONT, size)
+		self.blit_texts.append({
+			'obj':font.render(text, True, color),
+			'delay': delay,
+			'start': pygame.time.get_ticks(),
+			'pos':position,
+			'on': True
+			})
+
+		self.update_callback.append(self._blit_text_update)
+
+	def _blit_text_update(self, surface):
+		for i in self.blit_texts:
+			if (pygame.time.get_ticks() - i['start']) > i['delay']:
+				i['start'] = pygame.time.get_ticks()
+				i['on'] = not i['on']
+
+			if i['on']:
+				surface.blit(i['obj'], i['pos'].get())
 
 		return surface
 
