@@ -56,8 +56,7 @@ class FontMgr(object):
 		font = pygame.font.Font(cfg.FONT, size)
 
 		self.animate_texts.append({
-			'obj':font.render(text, False, color),
-			'nobj':font.render(text, False, cfg.BLACK),
+			'obj':font.render(text, True, color),
 			'p_start':Pos(start_pos.x(), start_pos.y()),
 			'p_curr': Pos(start_pos.x(), start_pos.y()),
 			'p_end': end_pos
@@ -69,11 +68,9 @@ class FontMgr(object):
 		for i in self.animate_texts:
 			if i['p_curr'] is not None:
 				if i['p_curr'].y() == i['p_end'].y():
-					surface.blit(i['nobj'], i['p_curr'].get())
 					i['p_curr'] = Pos(i['p_start'].x(), i['p_start'].y())
 					return surface
 
-				surface.blit(i['nobj'], i['p_curr'].get())
 				i['p_curr'].add_y(2)
 				surface.blit(i['obj'], i['p_curr'].get())
 

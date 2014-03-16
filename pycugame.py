@@ -44,7 +44,6 @@ def init():
 	
 	background = pygame.Surface(displaysurf.get_size())
 	background = background.convert()
-	background.fill(cfg.BLACK)
 
 	return fpsclock, displaysurf, background
 
@@ -69,6 +68,8 @@ def pycugame():
 	font.draw_text("Pycu Game! 4", cfg.YELLOW, Pos(400, 200))
 
 	while True:
+		background.fill(cfg.BLACK)
+
 		ev_ctx = pygame.event.get()
 
 		event_mgr(ev_ctx)
