@@ -37,11 +37,7 @@ class FontMgr(object):
 		self.texts = []
 
 		# Fall text context
-		self.obj_to_animate = None
-		self.obj_to_animate_n = None
-		self.start_pos = None
-		self.curr_pos  = None
-		self.end_pos = None
+		self.animate_texts = []
 
 	def draw_text(self, text, color, position, size=18):
 		font = pygame.font.Font(cfg.FONT, size)
@@ -58,25 +54,28 @@ class FontMgr(object):
 
 	def fall_text(self, text, color, start_pos, end_pos, size=18):
 		font = pygame.font.Font(cfg.FONT, size)
-		self.obj_to_animate = font.render(text, False, color)
-		self.obj_to_animate_n = font.render(text, False, cfg.BLACK)
 
-		self.start_pos = Pos(start_pos.x(), start_pos.y())
-		self.curr_pos = Pos(start_pos.x(), start_pos.y())
-		self.end_pos = end_pos
+		self.animate_texts.append({
+			'obj':font.render(text, False, color),
+			'nobj':font.render(text, False, cfg.BLACK),
+			'p_start':Pos(start_pos.x(), start_pos.y()),
+			'p_curr': Pos(start_pos.x(), start_pos.y()),
+			'p_end': end_pos
+			})
 
 		self.update_callback.append(self._fall_text_update)
 
 	def _fall_text_update(self, surface):
-		if self.curr_pos is not None:
-			if self.curr_pos.y() == self.end_pos.y():
-				surface.blit(self.obj_to_animate_n, self.curr_pos.get())
-				self.curr_pos = Pos(self.start_pos.x(), self.start_pos.y())
-				return surface
+		for i in self.animate_texts:
+			if i['p_curr'] is not None:
+				if i['p_curr'].y() == i['p_end'].y():
+					surface.blit(i['nobj'], i['p_curr'].get())
+					i['p_curr'] = Pos(i['p_start'].x(), i['p_start'].y())
+					return surface
 
-			surface.blit(self.obj_to_animate_n, self.curr_pos.get())
-			self.curr_pos.add_y(2)
-			surface.blit(self.obj_to_animate, self.curr_pos.get())
+				surface.blit(i['nobj'], i['p_curr'].get())
+				i['p_curr'].add_y(2)
+				surface.blit(i['obj'], i['p_curr'].get())
 
 		return surface
 

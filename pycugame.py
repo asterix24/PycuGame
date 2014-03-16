@@ -64,6 +64,7 @@ def pycugame():
 	# inizializzo il fontmanager
 	font = font_mgr.FontMgr()
 	font.fall_text("Pycu Game! 1", cfg.YELLOW, Pos(100,100), Pos(100,400))
+	font.fall_text("Pycu Game! 2", cfg.YELLOW, Pos(400,100), Pos(400,400))
 	font.draw_text("Pycu Game! 3", cfg.YELLOW, Pos(200, 200))
 	font.draw_text("Pycu Game! 4", cfg.YELLOW, Pos(400, 200))
 
