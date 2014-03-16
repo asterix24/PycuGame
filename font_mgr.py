@@ -59,7 +59,7 @@ class FontMgr(object):
 			'p_curr': Pos(start_pos.x(), start_pos.y()),
 			'p_end': end_pos,
 			'start': pygame.time.get_ticks(),
-			'delta': delay / (end_pos.y() - start_pos.y())
+			'delta': delay
 			})
 
 		self.update_callback.append(self._fall_text_update)
