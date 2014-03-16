@@ -50,14 +50,16 @@ class FontMgr(object):
 
 		return surface
 
-	def fall_text(self, text, color, start_pos, end_pos, size=18):
+	def fall_text(self, text, color, start_pos, end_pos, delay, size=18):
 		font = pygame.font.Font(cfg.FONT, size)
 
 		self.fall_texts.append({
 			'obj':font.render(text, True, color),
 			'p_start':Pos(start_pos.x(), start_pos.y()),
 			'p_curr': Pos(start_pos.x(), start_pos.y()),
-			'p_end': end_pos
+			'p_end': end_pos,
+			'start': pygame.time.get_ticks(),
+			'delta': delay / (end_pos.y() - start_pos.y())
 			})
 
 		self.update_callback.append(self._fall_text_update)
@@ -65,11 +67,13 @@ class FontMgr(object):
 	def _fall_text_update(self, surface):
 		for i in self.fall_texts:
 			if i['p_curr'] is not None:
+				if (pygame.time.get_ticks() - i['start']) > i['delta']:
+					i['start'] = pygame.time.get_ticks()
+					i['p_curr'].add_y(1)
+
 				if i['p_curr'].y() == i['p_end'].y():
 					i['p_curr'] = Pos(i['p_start'].x(), i['p_start'].y())
-					return surface
 
-				i['p_curr'].add_y(2)
 				surface.blit(i['obj'], i['p_curr'].get())
 
 		return surface
