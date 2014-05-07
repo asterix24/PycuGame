@@ -28,6 +28,7 @@ from pygame.locals import *
 
 import cfg
 import font_mgr
+import levels
 from coordinate import *
 
 # Funzione di init, dove si inizializza la
@@ -68,13 +69,15 @@ def pycugame():
 	font.draw_text("Pycu Game! 4", cfg.WHITE, Pos(400, 200))
 	font.blit_text("Pycu Game! 5", cfg.GREEN, Pos(50, 50), 500)
 	font.blit_text("Pycu Game! 6", cfg.GREEN, Pos(52, 52), 500)
+	lev_mgr = levels.Level()
 
 	while True:
 		background.fill(cfg.BLACK)
-
 		ev_ctx = pygame.event.get()
 
 		event_mgr(ev_ctx)
+
+		background = lev_mgr.update(background, ev_ctx)
 
 		background = font.update(background)
 		displaysurf.blit(background, (0, 0))
