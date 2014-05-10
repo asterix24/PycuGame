@@ -24,13 +24,10 @@
 from pygame.locals import *
 import pygame
 
-import cfg
-from coordinate import *
 
-list_image = [
-	'resourse/images/level1.png',
-	'resourse/images/level2.png',
-]
+import cfg
+
+from coordinate import *
 
 class Level(object):
     def __init__(self):
@@ -39,7 +36,7 @@ class Level(object):
         self.new()
 
     def new(self):
-        image_name = list_image[self.curr]
+        image_name = cfg.BACKGROUNDS[self.curr]
         self.curr_background = pygame.image.load(image_name).convert()
         self.curr += 1
 

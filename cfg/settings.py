@@ -30,4 +30,10 @@ LIGHTCOLORS = (LIGHTBLUE, LIGHTGREEN, LIGHTRED, LIGHTYELLOW)
 assert len(COLORS) == len(LIGHTCOLORS) # each color must have light color
 
 # Font
-FONT = 'resourse/font/freesansbold.ttf'
+FONT = 'resource/font/freesansbold.ttf'
+
+
+BACKGROUNDS = [
+	'resource/images/level1.png',
+	'resource/images/level2.png',
+]
